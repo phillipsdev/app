@@ -135,15 +135,27 @@ export default {
           comment: this.$t("activity_outside_directus"),
           id: -1
         });
+      } else {
+        const create = lastItem.action.toLowerCase() === "create";
+        const upload = lastItem.action.toLowerCase() === "upload";
+
+        if (!create && !upload) {
+          activityWithChanges.push({
+            action: "external",
+            comment: this.$t("activity_outside_directus"),
+            id: -1
+          });
+        }
       }
 
       return activityWithChanges.map(activity => ({
         ...activity,
         htmlcomment: this.$helpers.snarkdown(
           (activity.comment || "")
+            // Remove headings because they're ugly basically
+            .replace(/#/g, "")
             // Cleanup the comment, and escape HTML chars in order to prevent
             // XSS style problems
-            .replace(/#/g, "")
             .replace(/&/g, "&amp;")
             .replace(/</g, "&lt;")
             .replace(/>/g, "&gt;")
@@ -321,7 +333,8 @@ export default {
       padding: 8px 10px;
       display: inline-block;
       min-width: 36px;
-      // max-height: 400px;
+      white-space: pre;
+
       &:before {
         content: "";
         position: absolute;
