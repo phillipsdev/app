@@ -140,7 +140,15 @@ export default {
       return activityWithChanges.map(activity => ({
         ...activity,
         htmlcomment: this.$helpers.snarkdown(
-          (activity.comment || "").replace(/#/g, "") || ""
+          (activity.comment || "")
+            // Cleanup the comment, and escape HTML chars in order to prevent
+            // XSS style problems
+            .replace(/#/g, "")
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;") || ""
         )
       }));
     }
