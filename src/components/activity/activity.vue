@@ -12,7 +12,7 @@
         required
         :placeholder="$t('leave_comment')" />
 
-      <button type="submit">{{ $t('submit') }}</button>
+      <button type="submit" :disabled="comment.trim().length === 0">{{ $t('submit') }}</button>
     </form>
 
     <article
@@ -395,22 +395,23 @@ export default {
     position: absolute;
     bottom: 10px;
     right: 10px;
-    color: var(--lighter-gray);
-    cursor: not-allowed;
-    background-color: var(--white);
     text-transform: uppercase;
     font-weight: 700;
     font-size: 0.875rem;
     transition: var(--fast) var(--transition);
     transition-property: color, opacity;
     opacity: 0;
-  }
 
-  &:valid button {
     color: var(--accent);
     cursor: pointer;
     &:hover {
       color: var(--accent-dark);
+    }
+
+    &[disabled] {
+      color: var(--lighter-gray);
+      cursor: not-allowed;
+      background-color: var(--white);
     }
   }
 
